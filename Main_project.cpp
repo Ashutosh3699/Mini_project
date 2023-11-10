@@ -1,4 +1,4 @@
-// #include<bits/stdc++.h>
+#include<bits/stdc++.h>
 #include<iostream>
 #include<unordered_map>
 #include<vector>
@@ -33,8 +33,8 @@ class Product{
         string getname(){return this->name;}
         int getstock(){return this->stockLevel;}
 
-        bool operator==(Product &ob){
-            return (getname() == ob.getname() && getprice() == ob.getprice() && getstock() == ob.getstock());
+        bool operator==(Product &p){
+            return (getname() == p.getname() && getprice() == p.getprice() && getstock() == p.getstock());
         }
 
 
@@ -86,6 +86,46 @@ class Non_tech_p : public Product{
             cout<<"the company name is: "<<this->company_name<<endl;
             cout<<"the manu_date is: "<<this->manu_date<<endl;
 
+        }
+
+};
+
+//used this because i have to initialised the map container int the inventory
+namespace std {
+template<>
+struct hash<Product> {
+    size_t operator()(Product& p) {
+        size_t h1 = hash<string>()(p.getname());     
+        size_t h2 = hash<double>()(p.getprice());
+        size_t h3 = hash<int>()(p.getstock());
+        return h1 ^ h2 ^ h3 ;
+    }
+};
+
+
+template<>
+struct equal_to<Product> {
+    bool operator()(Product& p1, Product& p2)  {
+        return p1 == p2;
+    }
+};
+}
+
+class object{
+
+    private:
+        vector<Product>disp;
+
+    public:
+        void addProduct(Product ob){
+            disp.push_back(ob);
+        }
+
+        void dispProduct(){
+            cout<<"Detail of the order: "<<endl;
+            for(int i=0; i<disp.size(); i++){
+                cout<<"The name of the product: "<<disp[i].getname()<<"    Price is:"<<disp[i].getprice()<<endl;
+            }
         }
 
 };
@@ -156,14 +196,15 @@ class customer{
             return this->email;
         }
 };
-
+/*
 class inventory{
 
     //we can access the data of product quantity from void setdata in product
     private:
-        unordered_map<Product,int>store;
+        std::unordered_map<Product,int>store;
 
     public:
+        inventory(){};
         // method to add a product to the inventory
         void SetStore(Product ob, int stock){
 
@@ -187,7 +228,7 @@ class inventory{
         }
 
 };
-
+*/
 class payment{
 
     int amount;
@@ -281,7 +322,7 @@ void order :: OrderPlace(customer cust, shoping_cart prod, payment pay, shipping
 
 int main(){
 
-    Tech_p iphone(5,10);
+    /*Tech_p iphone(5,10);
     iphone.setData("iphone_15", "1002Iphone", 100000, "apple");
     iphone.setStock(100);
 
@@ -298,6 +339,27 @@ int main(){
     ashu.addProduct(iphone);
     ashu.addProduct(iphone1);
     cout<<ashu.totalCost()<<endl;
+    */
+    Tech_p iphone(5,10);
+    iphone.setData("iphone_15", "1002Iphone", 100000, "apple");
+    iphone.setStock(10);
+
+    Non_tech_p notebook(10,"10-11-2023");
+    notebook.setData("single_line","1002book", 100, "classmate");
+    notebook.setStock(10);
+/*
+    inventory storage;
+    storage.SetStore(iphone,10);
+    storage.SetStore(notebook,10);
+*/
+    object play;
+    play.addProduct(iphone);
+    play.addProduct(notebook);
+
+    customer ashu("ashu",122,"surat","ashu.in");
+    play.dispProduct();
+
+
 
     return 0;
 }

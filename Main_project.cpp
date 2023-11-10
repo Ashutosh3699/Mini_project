@@ -1,0 +1,303 @@
+// #include<bits/stdc++.h>
+#include<iostream>
+#include<unordered_map>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+// class for product that we use
+class Product{
+
+    protected:
+        string name;
+        string product_id;
+        int price;
+        string company_name;
+        int stockLevel;
+
+    public:
+
+        void setData(string name, string product_id, int price, string company_name){
+
+            this->name = name;
+            this->product_id = product_id;
+            this->price = price;
+            this->company_name = company_name;
+        }
+        void setStock(int d){
+            this->stockLevel = d;
+        }
+
+        int getprice(){return this->price;}
+        string getname(){return this->name;}
+        int getstock(){return this->stockLevel;}
+
+        bool operator==(Product &ob){
+            return (getname() == ob.getname() && getprice() == ob.getprice() && getstock() == ob.getstock());
+        }
+
+
+};
+//by using inheritance we can diffrentiate product into two classes
+class Tech_p : public Product{
+
+    int rating;
+    int discount;
+
+    public:
+
+        Tech_p(int r, int dis){
+            this->rating = r;
+            this->discount = dis;
+        }
+
+        void display(){
+
+            cout<<"name of product: "<<this->name<<endl;
+            cout<<"the price is: "<<this->price<<endl;
+            cout<<"the stock level is: "<<this->stockLevel<<endl;
+            cout<<"the product_id is: "<<this->product_id<<endl;
+            cout<<"the company name is: "<<this->company_name<<endl;
+            cout<<"the rating is: "<<this->rating<<endl;
+
+        }
+
+};
+
+class Non_tech_p : public Product{
+
+    int discount;
+    string manu_date;
+
+    public:
+
+        Non_tech_p(int dis, string ch){
+            this->discount = dis;
+            this->manu_date = ch;
+        }
+
+        void display(){
+
+            cout<<"name of product: "<<this->name<<endl;
+            cout<<"the price is: "<<this->price<<endl;
+            cout<<"the stock level is: "<<this->stockLevel<<endl;
+            cout<<"the product_id is: "<<this->product_id<<endl;
+            cout<<"the company name is: "<<this->company_name<<endl;
+            cout<<"the manu_date is: "<<this->manu_date<<endl;
+
+        }
+
+};
+
+class shoping_cart{
+
+    private:
+        vector<Product>store;
+
+    public:
+        void addProduct(Product ob){
+            store.push_back(ob);
+        }
+
+        //remove
+        void removeProduct(Product ob){
+
+            for(auto it=store.begin(); it!=store.end(); it++){
+
+                if(*it == ob){
+                    store.erase(it);
+                    break;
+                }
+            }
+        }
+
+        int totalCost(){
+
+            int sum = 0;
+            for(int i=0; i < store.size(); i++){//waring checkout
+                sum += store[i].getprice();
+            }
+            return sum;
+        }
+
+        void view(){
+            cout<<"Detail of the order: "<<endl;
+            for(int i=0; i<store.size(); i++){
+                cout<<"The name of the product: "<<store[i].getname()<<"    Price is:"<<store[i].getprice()<<endl;
+            }
+        }
+
+};
+
+class customer{
+
+    //details of the customer
+    string name;
+    int customer_id;
+    string address;
+    string email;
+
+    public:
+        customer(string name, int customer_id, string address, string email){
+            this->name = name;
+            this->customer_id = customer_id;
+            this->address = address;
+            this->email = email;
+        }
+
+        string getaddress(){
+            return this->address;
+        }
+        string getname(){
+            return this->name;
+        }
+        string getemail(){
+            return this->email;
+        }
+};
+
+class inventory{
+
+    //we can access the data of product quantity from void setdata in product
+    private:
+        unordered_map<Product,int>store;
+
+    public:
+        // method to add a product to the inventory
+        void SetStore(Product ob, int stock){
+
+            store[ob] = stock;
+        }
+        // method to update the stock level of a product
+        void updateStock(Product ob, int stock) {
+            store[ob] = stock;
+        }
+        //availability of the product
+        bool isAvailable(Product ob){
+            if(store[ob] > 0){
+                return true;
+            }
+            else
+                return false;
+        }
+        // method to restock a product
+        void restock(Product product, int quantity) {
+            store[product] += quantity;
+        }
+
+};
+
+class payment{
+
+    int amount;
+    string paymentMethod;
+
+    public:
+
+        void setPayment(int amount, string method){
+            this->amount = amount;
+            this->paymentMethod = method;
+        }
+        void displaypayment(){
+            cout<<"payment method is: "<<paymentMethod<<endl;
+            cout<<"the total amount is: "<<amount<<endl;
+        }
+        int getAmount(){
+            return amount;
+        }
+        string getMethod(){
+            return paymentMethod;
+        }
+
+};
+
+class shipping{
+
+    string shippingMethod;
+    int charge;
+
+    public:
+
+        shipping(){}
+
+        shipping(string shippingMethod, int shippingCost) {
+        this->shippingMethod = shippingMethod;
+        this->charge = shippingCost;
+        }
+
+        void setship(string , int);
+
+        int getCost(){
+            return charge;
+        }
+        string getMethod(){
+            return shippingMethod;
+        }
+
+};
+
+void shipping :: setship(string shippingMethod, int shippingCost){
+    this->shippingMethod = shippingMethod;
+    this->charge = shippingCost;
+}
+
+class order{
+
+    int order_id;
+    string date;
+
+    public:
+        order(int order_id, string date){
+            this->order_id = order_id;
+            this->date = date;
+        }
+
+        void OrderPlace(customer, shoping_cart, payment, shipping);
+
+};
+
+void order :: OrderPlace(customer cust, shoping_cart prod, payment pay, shipping ship){
+
+    //customer wala part
+    cout<<"The order has been placed:"<<endl<<endl<<endl;
+    cout<<"customer name : "<<cust.getname()<<"         email id: "<<cust.getemail()<<endl;
+    cout<<"address to be placed: "<<cust.getaddress();
+    cout<<endl<<endl;
+
+    //product wala part
+    prod.view();
+    cout<<endl<<endl;
+
+    //shipping ka part
+    cout<<"The shipping detail are:"<<endl;
+    cout<<"The mode of ship is: "<<ship.getMethod()<<" and the charge is: "<<ship.getCost();
+    cout<<endl<<endl;
+
+    //payment ka part
+    cout<<"The mode of payment was: "<<pay.getMethod()<<endl;
+    cout<<"The total cost is: "<<pay.getAmount()<<endl;
+}
+
+int main(){
+
+    Tech_p iphone(5,10);
+    iphone.setData("iphone_15", "1002Iphone", 100000, "apple");
+    iphone.setStock(100);
+
+    iphone.display();
+
+    Tech_p iphone1(5,10);
+    iphone1.setData("iphone_15", "1002Iphone", 10000, "apple");
+    iphone1.setStock(100);
+
+    iphone1.display();
+
+    shoping_cart ashu;
+
+    ashu.addProduct(iphone);
+    ashu.addProduct(iphone1);
+    cout<<ashu.totalCost()<<endl;
+
+    return 0;
+}

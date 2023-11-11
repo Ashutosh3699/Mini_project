@@ -124,8 +124,20 @@ class object{
         void dispProduct(){
             cout<<"Detail of the order: "<<endl;
             for(int i=0; i<disp.size(); i++){
-                cout<<"The name of the product: "<<disp[i].getname()<<"    Price is:"<<disp[i].getprice()<<endl;
+                cout<<disp[i].getname()<<"    Price is:"<<disp[i].getprice()<<endl;
             }
+        }
+
+        pair<Product,bool> compareP(string s){
+
+            for(int i=0; i<disp.size(); i++){
+                if(disp[i].getname() == s){
+                    pair<Product,bool>p = make_pair(disp[i],true );
+                    return p;
+                }
+            }
+            pair<Product,bool>p = make_pair(disp[0],false);
+            return p;
         }
 
 };
@@ -196,39 +208,7 @@ class customer{
             return this->email;
         }
 };
-/*
-class inventory{
 
-    //we can access the data of product quantity from void setdata in product
-    private:
-        std::unordered_map<Product,int>store;
-
-    public:
-        inventory(){};
-        // method to add a product to the inventory
-        void SetStore(Product ob, int stock){
-
-            store[ob] = stock;
-        }
-        // method to update the stock level of a product
-        void updateStock(Product ob, int stock) {
-            store[ob] = stock;
-        }
-        //availability of the product
-        bool isAvailable(Product ob){
-            if(store[ob] > 0){
-                return true;
-            }
-            else
-                return false;
-        }
-        // method to restock a product
-        void restock(Product product, int quantity) {
-            store[product] += quantity;
-        }
-
-};
-*/
 class payment{
 
     int amount;
@@ -322,24 +302,7 @@ void order :: OrderPlace(customer cust, shoping_cart prod, payment pay, shipping
 
 int main(){
 
-    /*Tech_p iphone(5,10);
-    iphone.setData("iphone_15", "1002Iphone", 100000, "apple");
-    iphone.setStock(100);
-
-    iphone.display();
-
-    Tech_p iphone1(5,10);
-    iphone1.setData("iphone_15", "1002Iphone", 10000, "apple");
-    iphone1.setStock(100);
-
-    iphone1.display();
-
-    shoping_cart ashu;
-
-    ashu.addProduct(iphone);
-    ashu.addProduct(iphone1);
-    cout<<ashu.totalCost()<<endl;
-    */
+    
     Tech_p iphone(5,10);
     iphone.setData("iphone_15", "1002Iphone", 100000, "apple");
     iphone.setStock(10);
@@ -359,7 +322,44 @@ int main(){
     customer ashu("ashu",122,"surat","ashu.in");
     play.dispProduct();
 
+    string s;
+    shoping_cart cust;
 
+    do {
+
+        cin >> s;
+
+        if(s == "exit"){
+            break;
+        }
+
+        pair<Product,bool> stockP = play.compareP(s);
+        
+        // cust.addProduct();
+        if(stockP.second){
+            cust.addProduct(stockP.first);
+        }
+        else{
+            cout<<"no such product is there"<<endl;
+        }
+
+    }while(s!="exit");
+
+    cust.view();
+    int amount = cust.totalCost();
+    cout<<"The total cost is: "<<amount<<endl;
+
+    payment pay;
+    shipping ship("truck",10);
+
+    pay.setPayment(amount+ship.getCost(),"credit_card");
+
+    order placed(1002,"11-12-2023");
+
+    placed.OrderPlace(ashu,cust,pay,ship);
+
+
+    //********************removed inventory (for now)*********************** 
 
     return 0;
 }

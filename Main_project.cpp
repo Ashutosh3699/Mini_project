@@ -327,7 +327,7 @@ int main(){
         }
     }while(num!=1 && num!=2);
 
-    if(num == 1){
+    if(num == 2){
         cout<<"enter the customer detail:"<<endl;
         string name,address,email;
         cin>>name>>address>>email;

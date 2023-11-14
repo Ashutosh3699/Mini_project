@@ -18,6 +18,7 @@ class Product{
 
     public:
 
+        //set deatils for the product info
         void setData(string name, string product_id, int price, string company_name){
 
             this->name = name;
@@ -25,14 +26,19 @@ class Product{
             this->price = price;
             this->company_name = company_name;
         }
+
+        //to check the stock level of the that product
         void setStock(int d){
             this->stockLevel = d;
         }
 
+        //to fetch the details of that product
         int getprice(){return this->price;}
         string getname(){return this->name;}
         int getstock(){return this->stockLevel;}
 
+        //to match between two product:
+        //operator overload
         bool operator==(Product &p){
             return (getname() == p.getname() && getprice() == p.getprice() && getstock() == p.getstock());
         }
@@ -40,14 +46,14 @@ class Product{
 
 };
 //by using inheritance we can diffrentiate product into two classes
-class Tech_p : public Product{
+class Tech_p : public Product{ //heritate the properties from product class
 
     int rating;
     int discount;
 
     public:
 
-        Tech_p(int r, int dis){
+        Tech_p(int r, int dis){ //construct call of that product with rating and discount 
             this->rating = r;
             this->discount = dis;
         }
@@ -65,14 +71,14 @@ class Tech_p : public Product{
 
 };
 
-class Non_tech_p : public Product{
+class Non_tech_p : public Product{ //inherit the properties from product class
 
     int discount;
     string manu_date;
 
     public:
 
-        Non_tech_p(int dis, string ch){
+        Non_tech_p(int dis, string ch){//taking detail of discount and manufacture date
             this->discount = dis;
             this->manu_date = ch;
         }
@@ -90,6 +96,7 @@ class Non_tech_p : public Product{
 
 };
 
+//class store product details in a container: we can remove and add and view all the product details
 class inventory{
 
     private:
@@ -107,6 +114,7 @@ class inventory{
             }
         }
 
+        //compare name of the product and provide all the details of that same product if it is present in the store
         pair<Product,bool> compareP(string s){
 
             for(int i=0; i<disp.size(); i++){
@@ -121,17 +129,19 @@ class inventory{
 
 };
 
+//class for the customer to select the object and store selected object 
 class shoping_cart{
 
     private:
         vector<Product>store;
 
     public:
+    //store the selected object
         void addProduct(Product ob){
             store.push_back(ob);
         }
 
-        //remove
+        //remove the item from add to cart
         void removeProduct(Product ob){
 
             for(auto it=store.begin(); it!=store.end(); it++){
@@ -142,7 +152,7 @@ class shoping_cart{
                 }
             }
         }
-
+        //get the total cost of the shopping cart
         int totalCost(){
 
             int sum = 0;
@@ -152,6 +162,7 @@ class shoping_cart{
             return sum;
         }
 
+        //to do any operation over the selected product by users
         pair<Product,bool> compareP(string s){
 
             for(int i=0; i<store.size(); i++){
@@ -163,7 +174,7 @@ class shoping_cart{
             pair<Product,bool>p = make_pair(store[0],false);
             return p;
         }
-
+        //get the deatils of the object
         void view(){
             cout<<"Detail of the order: "<<endl;
             for(int i=0; i<store.size(); i++){
@@ -173,7 +184,7 @@ class shoping_cart{
                 cout<<"no item is present: "<<endl;
             }
         }
-
+        //to check the size is 0 or not
         bool no_of_item(){
             if(store.size()){
                 return true;
@@ -192,6 +203,7 @@ class customer{
     string email;
 
     public:
+    //details of the customers directly calling constructor
         customer(string name, int customer_id, string address, string email){
             this->name = name;
             this->customer_id = customer_id;
@@ -199,6 +211,7 @@ class customer{
             this->email = email;
         }
 
+        //to fetch the details of the customer
         string getaddress(){
             return this->address;
         }
@@ -212,6 +225,8 @@ class customer{
 
 class payment{
 
+
+    //payment system for the customer
     int amount;
     string paymentMethod;
 
@@ -334,6 +349,7 @@ int main(){
         }
     }while(num!=1 && num!=2);
 
+    //customer part:
     if(num == 2){
         cout<<"enter the customer detail:"<<endl;
         string name,address,email;
@@ -438,7 +454,7 @@ int main(){
 
     }
     
-    //Admin part is left
+    //Admin part :
 
     if(num == 1){
 
@@ -469,9 +485,6 @@ int main(){
             }while(num != 1 && num != 2);
             start: 
             if(num == 1){
-                /*Tech_p iphone(5,10);
-                iphone.setData("iphone_15", "1002Iphone", 100000, "apple");
-                iphone.setStock(10);*/
 
                 cout<<"enter the details of the product: "<<endl;
                 string name,id,company;
